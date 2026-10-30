@@ -1,10 +1,742 @@
-l<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="kk">
 <head>
-   <meta charset="UTF-8">
-   <title>Менің жеке парақшам</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Гүлназ Амантай | Geography & GIS</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#07111f;
+    color:#eef4ff;
+    overflow-x:hidden;
+}
+
+/* Фондағы шеңберлер */
+
+body::before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    background:#2457ff;
+    opacity:.12;
+    filter:blur(100px);
+    top:-150px;
+    left:-150px;
+    z-index:-1;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    border-radius:50%;
+    background:#00c9a7;
+    opacity:.08;
+    filter:blur(100px);
+    right:-150px;
+    bottom:-150px;
+    z-index:-1;
+}
+
+/* Навигация */
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    backdrop-filter:blur(15px);
+    background:rgba(7,17,31,.75);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.nav-inner{
+    max-width:1100px;
+    margin:auto;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.logo span{
+    color:#6c8cff;
+}
+
+nav a{
+    color:#b9c5d8;
+    text-decoration:none;
+    margin-left:25px;
+    font-size:14px;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:white;
+}
+
+/* Жалпы */
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:0 25px;
+}
+
+/* HERO */
+
+.hero{
+    min-height:88vh;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:50px;
+}
+
+.hero-text{
+    max-width:650px;
+    animation:fadeUp 1s ease;
+}
+
+.small-title{
+    color:#6c8cff;
+    font-size:15px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:clamp(50px,8vw,90px);
+    line-height:.95;
+    letter-spacing:-4px;
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    color:#6c8cff;
+}
+
+.hero-description{
+    color:#aebbd0;
+    font-size:18px;
+    line-height:1.8;
+    max-width:600px;
+}
+
+.buttons{
+    margin-top:35px;
+}
+
+.btn{
+    display:inline-block;
+    padding:13px 22px;
+    border-radius:30px;
+    text-decoration:none;
+    margin-right:10px;
+    transition:.3s;
+}
+
+.btn-primary{
+    background:#6c8cff;
+    color:white;
+}
+
+.btn-primary:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 30px rgba(108,140,255,.3);
+}
+
+.btn-outline{
+    border:1px solid rgba(255,255,255,.2);
+    color:white;
+}
+
+.btn-outline:hover{
+    background:rgba(255,255,255,.08);
+}
+
+/* Глобус */
+
+.globe{
+    width:330px;
+    height:330px;
+    border-radius:50%;
+    border:1px solid rgba(108,140,255,.4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    box-shadow:
+        0 0 50px rgba(108,140,255,.15),
+        inset 0 0 50px rgba(108,140,255,.08);
+    animation:float 5s ease-in-out infinite;
+}
+
+.globe::before,
+.globe::after{
+    content:"";
+    position:absolute;
+    border:1px solid rgba(108,140,255,.25);
+    border-radius:50%;
+}
+
+.globe::before{
+    width:70%;
+    height:100%;
+}
+
+.globe::after{
+    width:100%;
+    height:45%;
+}
+
+.globe-icon{
+    font-size:110px;
+    opacity:.9;
+}
+
+/* Section */
+
+section{
+    padding:100px 0;
+}
+
+.section-label{
+    color:#6c8cff;
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+.section-title{
+    font-size:42px;
+    margin-bottom:40px;
+}
+
+/* About */
+
+.about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.card{
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    padding:30px;
+    backdrop-filter:blur(10px);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(108,140,255,.4);
+}
+
+.card h3{
+    font-size:21px;
+    margin-bottom:15px;
+}
+
+.card p{
+    color:#aebbd0;
+    line-height:1.8;
+}
+
+.info-list{
+    list-style:none;
+}
+
+.info-list li{
+    padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+    color:#b8c4d7;
+}
+
+.info-list strong{
+    color:white;
+}
+
+/* Research */
+
+.research{
+    position:relative;
+    overflow:hidden;
+}
+
+.research-number{
+    font-size:80px;
+    font-weight:bold;
+    color:rgba(108,140,255,.08);
+    position:absolute;
+    right:25px;
+    top:10px;
+}
+
+.research h3{
+    color:#6c8cff;
+    font-size:25px;
+    max-width:750px;
+    margin-bottom:20px;
+}
+
+.research p{
+    max-width:800px;
+}
+
+/* Skills */
+
+.skills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.skill{
+    padding:12px 18px;
+    border-radius:30px;
+    background:rgba(108,140,255,.09);
+    border:1px solid rgba(108,140,255,.2);
+    color:#d9e1ff;
+    transition:.3s;
+}
+
+.skill:hover{
+    background:#6c8cff;
+    transform:translateY(-3px);
+}
+
+/* Projects */
+
+.projects{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.project{
+    min-height:210px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.project-icon{
+    font-size:35px;
+}
+
+.project h3{
+    margin:20px 0 10px;
+}
+
+.project p{
+    font-size:14px;
+}
+
+/* Footer */
+
+footer{
+    border-top:1px solid rgba(255,255,255,.08);
+    padding:35px 0;
+    color:#718096;
+    text-align:center;
+}
+
+.footer-name{
+    color:white;
+    font-weight:bold;
+}
+
+/* Анимациялар */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-15px);
+    }
+}
+
+/* Телефон */
+
+@media(max-width:800px){
+
+    .hero{
+        min-height:auto;
+        padding:100px 0;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .globe{
+        width:250px;
+        height:250px;
+        align-self:center;
+    }
+
+    .about-grid{
+        grid-template-columns:1fr;
+    }
+
+    .projects{
+        grid-template-columns:1fr;
+    }
+
+    nav a{
+        display:none;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+}
+
+</style>
 </head>
+
+
 <body>
-   <h1>Сәлем! Бұл менің жеке сайтым.</h1>
-   <p>GitHub Pages арқылы сәтті жарияланды!</p>
+
+<!-- NAVIGATION -->
+
+<nav>
+    <div class="nav-inner">
+
+        <div class="logo">
+            G<span>A</span>
+        </div>
+
+        <div>
+            <a href="#about">Мен туралы</a>
+            <a href="#research">Зерттеу</a>
+            <a href="#skills">Дағдылар</a>
+            <a href="#projects">Жобалар</a>
+        </div>
+
+    </div>
+</nav>
+
+
+<main class="container">
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-text">
+
+        <div class="small-title">
+            Geography • GIS • Research
+        </div>
+
+        <h1>
+            Гүлназ<br>
+            <span>Амантай</span>
+        </h1>
+
+        <p class="hero-description">
+            География магистранты және жас зерттеуші.
+            Ландшафттану, геоақпараттық жүйелер және
+            қашықтан зондтау технологиялары арқылы
+            табиғи ортаны зерттеймін.
+        </p>
+
+        <div class="buttons">
+
+            <a href="#research" class="btn btn-primary">
+                Зерттеуім →
+            </a>
+
+            <a href="#about" class="btn btn-outline">
+                Мен туралы
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="globe">
+
+        <div class="globe-icon">
+            🌍
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section id="about">
+
+    <div class="section-label">
+        01 — About me
+    </div>
+
+    <h2 class="section-title">
+        Мен туралы
+    </h2>
+
+
+    <div class="about-grid">
+
+        <div class="card">
+
+            <h3>👩‍🎓 Географ</h3>
+
+            <p>
+                География бағыты бойынша магистратурада білім алып,
+                физикалық география мен ландшафттық зерттеулер
+                саласында ғылыми жұмыс жүргізіп келемін.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <ul class="info-list">
+
+                <li>
+                    <strong>Білім:</strong>
+                    Магистратура
+                </li>
+
+                <li>
+                    <strong>Бағыт:</strong>
+                    География
+                </li>
+
+                <li>
+                    <strong>Зерттеу:</strong>
+                    Ландшафттану
+                </li>
+
+                <li>
+                    <strong>Негізгі құрал:</strong>
+                    GIS технологиялары
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RESEARCH -->
+
+<section id="research">
+
+    <div class="section-label">
+        02 — Research
+    </div>
+
+    <h2 class="section-title">
+        Ғылыми зерттеу
+    </h2>
+
+
+    <div class="card research">
+
+        <div class="research-number">
+            01
+        </div>
+
+        <h3>
+            Маңғыстау түбегінің ландшафттық құрылымдық ерекшеліктері
+        </h3>
+
+        <p>
+            Зерттеу жұмысым Маңғыстау түбегінің ландшафттық
+            құрылымын, табиғи жағдайларын және кеңістіктік
+            дифференциациясын зерттеуге бағытталған.
+        </p>
+
+        <br>
+
+        <p>
+            Зерттеу барысында GIS, қашықтан зондтау,
+            спутниктік суреттер және физикалық-географиялық
+            талдау әдістері қолданылады.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- SKILLS -->
+
+<section id="skills">
+
+    <div class="section-label">
+        03 — Skills
+    </div>
+
+    <h2 class="section-title">
+        Кәсіби дағдылар
+    </h2>
+
+
+    <div class="skills">
+
+        <div class="skill">ArcGIS</div>
+        <div class="skill">ArcMap 10.6.1</div>
+        <div class="skill">QGIS</div>
+        <div class="skill">Google Earth Engine</div>
+        <div class="skill">Remote Sensing</div>
+        <div class="skill">Landsat</div>
+        <div class="skill">Sentinel-2</div>
+        <div class="skill">SRTM / DEM</div>
+        <div class="skill">NDVI</div>
+        <div class="skill">NDWI</div>
+        <div class="skill">Raster Analysis</div>
+        <div class="skill">Cartography</div>
+
+    </div>
+
+</section>
+
+
+<!-- PROJECTS -->
+
+<section id="projects">
+
+    <div class="section-label">
+        04 — Projects
+    </div>
+
+    <h2 class="section-title">
+        Зерттеу жобалары
+    </h2>
+
+
+    <div class="projects">
+
+
+        <div class="card project">
+
+            <div class="project-icon">
+                🏜️
+            </div>
+
+            <div>
+                <h3>Маңғыстау</h3>
+
+                <p>
+                    Ландшафттық құрылым және
+                    табиғи кешендердің кеңістіктік
+                    дифференциациясы.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="card project">
+
+            <div class="project-icon">
+                🛰️
+            </div>
+
+            <div>
+                <h3>Remote Sensing</h3>
+
+                <p>
+                    Sentinel-2 және Landsat
+                    деректері негізінде табиғи
+                    нысандарды зерттеу.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="card project">
+
+            <div class="project-icon">
+                🗺️
+            </div>
+
+            <div>
+                <h3>GIS Mapping</h3>
+
+                <p>
+                    Кеңістіктік деректерді өңдеу,
+                    тақырыптық карталар және
+                    ландшафттық картография.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<footer>
+
+    <span class="footer-name">
+        Гүлназ Амантай
+    </span>
+
+    <br>
+
+    Geography • GIS • Research
+
+    <br><br>
+
+    © 2026
+
+</footer>
+
+
 </body>
 </html>
